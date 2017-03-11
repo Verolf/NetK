@@ -1,47 +1,34 @@
 package s1;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 
 public class App {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
-//        int arrayLength = 0;
-        int max, min;
-//        System.out.println("Введите кол-во элементов массива");
-//
-//        if (scan.hasNextInt()) {
-//            arrayLength = scan.nextInt();
-//        }
-//        int[] dva = new int[arrayLength];
-//
-//        for (int i = 0; i < arrayLength; i++) {
-//            System.out.println("Введите элемент массива №" + i + ":");
-//            if (scan.hasNextInt()) {
-//                dva[i] = scan.nextInt();
-//            }
-//        }
-
-//        max = dva[0];
-//        min = dva[0];
-        int[] dva = new int[4];
-        int i = 0;
+        Integer max, min;
+        ArrayList<Integer> arrayListInt = new ArrayList(8);
+        System.out.println("Введите элементы массива, после нажмите ctrl+D");
         while (scan.hasNextInt()) {
-
-
+            arrayListInt.add(scan.nextInt());
         }
 
-        for (int i = 1; i < arrayLength; i++) {
-            if (max < dva[i]) {
-                max = dva[i];
+        Integer[] arrayInt = arrayListInt.toArray(new Integer[arrayListInt.size()]);
+        max = arrayInt[0];
+        min = arrayInt[0];
+        for (int i = 1; i < arrayInt.length; i++) {
+            if (max < arrayInt[i]) {
+                max = arrayInt[i];
             }
-            if (min > dva[i]){
-                min = dva[i];
+            if (min > arrayInt[i]){
+                min = arrayInt[i];
             }
         }
 
-        for (int i = 0; i < arrayLength; i++) {
-            System.out.print(dva[i] + " ");
+        for (int i = 0; i < arrayInt.length; i++) {
+            System.out.print(arrayInt[i] + " ");
         }
+        System.out.println("");
         System.out.println("max: " + max);
         System.out.println("min: " + min);
     }
