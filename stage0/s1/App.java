@@ -13,7 +13,6 @@ public class App {
             arrayListInt.add(scan.nextInt());
         }
 
-//        Integer[] arrayInt = arrayListInt.toArray(new Integer[arrayListInt.size()]);
         max = arrayListInt.get(0);
         min = arrayListInt.get(0);
         for (int i = 1; i < arrayListInt.size(); i++) {
