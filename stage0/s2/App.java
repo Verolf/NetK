@@ -1,27 +1,26 @@
 package s2;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
-/**
- * Created by Seva_ on 11.03.2017.
- */
 public class App {
+
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
-//        ArrayList<String> arrayListInt = new ArrayList(8);
+        ArrayList<String> arrayListStr = new ArrayList();
         String str = "";
         System.out.println("Введите элементы массива, после нажмите ctrl+D");
-        if (scan.hasNextLine()) {
+        if (scan.hasNext()) {
             str = scan.nextLine();
         }
+        for (String z: str.split(" ")) {
+            arrayListStr.add(z);
+        }
 
-//        String[] arrayString = arrayListInt.toArray(new String[arrayListInt.size()]);
+        Collections.sort(arrayListStr, new MyComparator(""));
 
-//        for (int i = 0; i < str.length; i++) {
-//            System.out.print( str[i] + " ");
-//        }
-
-        System.out.println(str);
-
+        for (int i = 0; i < arrayListStr.size(); i++) {
+            System.out.println(arrayListStr.get(i));
+        }
     }
 }
