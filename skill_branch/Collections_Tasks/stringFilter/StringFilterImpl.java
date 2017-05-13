@@ -7,6 +7,8 @@ import java.util.*;
  */
 public class StringFilterImpl implements StringFilter{
     public static Set<String> stringHashSet = new HashSet<>();
+    public static Iterator<String> iterStart = stringHashSet.iterator();
+    public static boolean flagStart = false;
     @Override
     public void add(String s) {
         if (s != null) {
@@ -65,20 +67,25 @@ public class StringFilterImpl implements StringFilter{
      */
     @Override
     public Iterator<String> getStringsStartingWith(String begin) {
-        Iterator<String> iter = stringHashSet.iterator();
+
+        if (!iterStart.hasNext()) {
+            iterStart = stringHashSet.iterator();
+        }
 
         String prefix;
         if ((begin != null) && (!begin.isEmpty())) {
             prefix = begin.toLowerCase();
         } else {
-            return iter;
+            iterStart.next();
+            return iterStart;
         }
 
-        while (iter.hasNext()) {
-            if (iter.next().startsWith(prefix)){
-                return iter;
+        while (iterStart.hasNext()) {
+            if (iterStart.next().startsWith(prefix)){
+                return iterStart;
             }
         }
+
         return null;
     }
 
@@ -125,20 +132,22 @@ public class StringFilterImpl implements StringFilter{
     }
 
 
-    public static void main(String... args) {
-        StringFilter s = new StringFilterImpl();
-        s.add("Kek");
-        s.add("Kekbl");
-        System.out.println(stringHashSet.toString());
-
-        Iterator<String> iter;
-        iter = s.getStringsStartingWith("ke");
-        System.out.println(iter.next());
+//    public static void main(String... args) {
+//        StringFilter s = new StringFilterImpl();
+//        s.add("Kek");
+//        s.add("Kebrl");
+//        s.add("Kekbl");
+//        s.add("Keskbl");
+//        System.out.println(stringHashSet.toString());
+//
+//        Iterator<String> iter;
+//        iter = s.getStringsStartingWith("kew");
+//        //System.out.println(iter.next());
 //        iter = s.getStringsStartingWith("ke");
 //        System.out.println(iter.next());
-//        iter = s.getStringsStartingWith("ke");
-//        System.out.println(iter.next());
-
-
-    }
+////        iter = s.getStringsStartingWith("ke");
+////        System.out.println(iter.next());
+//
+//
+//    }
 }
