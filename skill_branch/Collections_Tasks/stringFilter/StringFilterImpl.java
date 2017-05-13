@@ -7,8 +7,7 @@ import java.util.*;
  */
 public class StringFilterImpl implements StringFilter{
     public static Set<String> stringHashSet = new HashSet<>();
-    public static Iterator<String> iterStart = stringHashSet.iterator();
-    public static boolean flagStart = false;
+
     @Override
     public void add(String s) {
         if (s != null) {
@@ -41,75 +40,101 @@ public class StringFilterImpl implements StringFilter{
         return stringHashSet;
     }
 
-    /**
-     * Ищет и возвращает все строки, содержащие указанную последовательность символов.<br/>
-     * Если <code>chars</code> - пустая строка или <code>null</code>,
-     * то результат содержит все строки данного набора.<br/>
-     *
-     * @param chars символы, входящие в искомые строки
-     *              (все символы, являющиеся буквами, - в нижнем регистре)
-     * @return строки, содержащие указанную последовательность символов
-     */
     @Override
     public Iterator<String> getStringsContaining(String chars) {
-        return null;
-    }
+        Set<String> startSet = new HashSet<String>();
 
-    /**
-     * Ищет и возвращает строки, начинающиеся с указанной последовательности символов,
-     * (без учета регистра). <br/>
-     * Если <code>begin</code> - пустая строка или <code>null</code>,
-     * то результат содержит все строки данного набора.<br/>
-     *
-     * @param begin первые символы искомых строк
-     *              (для сравнения со строками набора символы нужно привести к нижнему регистру)
-     * @return строки, начинающиеся с указанной последовательности символов
-     */
-    @Override
-    public Iterator<String> getStringsStartingWith(String begin) {
-
-        if (!iterStart.hasNext()) {
-            iterStart = stringHashSet.iterator();
+        if (chars != null) {
+            chars = chars.toLowerCase();
         }
 
-        String prefix;
-        if ((begin != null) && (!begin.isEmpty())) {
-            prefix = begin.toLowerCase();
-        } else {
-            iterStart.next();
-            return iterStart;
-        }
-
-        while (iterStart.hasNext()) {
-            if (iterStart.next().startsWith(prefix)){
-                return iterStart;
+        for (String str : stringHashSet) {
+            if ((chars != null) && (!chars.isEmpty())){
+                if ((str != null) && (str.contains(chars))) {
+                    startSet.add(str);
+                }
+            } else {
+                startSet.add(str);
             }
         }
 
-        return null;
+        Iterator<String> it = startSet.iterator();
+        return it;
     }
 
+    @Override
+    public Iterator<String> getStringsStartingWith(String begin) {
+        Set<String> startSet = new HashSet<String>();
 
+        if (begin != null) {
+            begin = begin.toLowerCase();
+        }
 
-    /**
-     * Ищет и возвращает все строки, представляющие собой число в заданном формате.<br/>
-     * Формат может содержать символ # (место для одной цифры от 0 до 9) и любые символы.
-     * Примеры форматов: "(###)###-####" (телефон), "# ###" (целое число от 1000 до 9999),
-     * "-#.##" (отрицательное число, большее -10, с ровно двумя знаками после десятичной точки).<br/>
-     * Упрощающее ограничение: в строке, удовлетворяющей формату, должно быть ровно столько символов,
-     * сколько в формате (в отличие от стандартного понимания числового формата,
-     * где некоторые цифры на месте # не являются обязательными).<br/>
-     * Примечание: в данной постановке задачи НЕ предполагается использование регулярных выражений
-     * или какого-либо высокоуровневого API (эти темы изучаются позже).<br/>
-     * Если <code>format</code> - пустая строка или <code>null</code>,
-     * то результат содержит все строки данного набора.<br/>
-     *
-     * @param format формат числа
-     * @return строки, удовлетворяющие заданному числовому формату
-     */
+        for (String str : stringHashSet) {
+            if ((begin != null) && (!begin.isEmpty())){
+                if ((str != null) && (str.startsWith(begin))) {
+                    startSet.add(str);
+                }
+            } else {
+                startSet.add(str);
+            }
+        }
+
+        Iterator<String> it = startSet.iterator();
+        return it;
+    }
+
     @Override
     public Iterator<String> getStringsByNumberFormat(String format) {
-        return null;
+        Set<String> startSet = new HashSet<String>();
+
+        if (format != null) {
+            format = format.toLowerCase();
+        }
+
+
+        if ((format != null) && (!format.isEmpty())) {
+            for (String str : stringHashSet) {
+                if ((str == null) || (format.length() != str.length())) {
+                    continue;
+                }
+
+                int i = 0;
+                boolean flag = true;
+                while (i < format.length()) {
+                    if (format.charAt(i) != '#') {
+                        if (format.charAt(i) != str.charAt(i)) {
+                            flag = false;
+                            break;
+                        }
+                    } else {
+                        if ((str.charAt(i) != '0') && (str.charAt(i) != '1') && (str.charAt(i) != '2') && (str.charAt(i) != '3') &&
+                                (str.charAt(i) != '4') && (str.charAt(i) != '5') && (str.charAt(i) != '6') && (str.charAt(i) != '7') &&
+                                (str.charAt(i) != '8') && (str.charAt(i) != '9')) {
+                            flag = false;
+                            break;
+                        }
+                    }
+                    i++;
+                }
+
+                if (flag) {
+                    startSet.add(str);
+                }
+            }
+
+        } else {
+            for (String str : stringHashSet) {
+                startSet.add(str);
+            }
+        }
+
+        System.out.println(startSet);
+
+
+
+        Iterator<String> it = startSet.iterator();
+        return it;
     }
 
     /**
@@ -133,21 +158,19 @@ public class StringFilterImpl implements StringFilter{
 
 
 //    public static void main(String... args) {
-//        StringFilter s = new StringFilterImpl();
-//        s.add("Kek");
-//        s.add("Kebrl");
-//        s.add("Kekbl");
-//        s.add("Keskbl");
-//        System.out.println(stringHashSet.toString());
+//        StringFilter a = new StringFilterImpl();
+//        a.add("k32");
+//        a.add(null);
+//        a.add("kekbt");
+//        a.add("12");
+//        a.add("1");
+//        a.add("53");
 //
-//        Iterator<String> iter;
-//        iter = s.getStringsStartingWith("kew");
-//        //System.out.println(iter.next());
-//        iter = s.getStringsStartingWith("ke");
-//        System.out.println(iter.next());
-////        iter = s.getStringsStartingWith("ke");
-////        System.out.println(iter.next());
+//        System.out.println(a.getCollection());
+//        Iterator<String> it = a.getStringsByNumberFormat("k#2");
 //
-//
+////        while (it.hasNext()) {
+////            System.out.println(it.next());
+////        }
 //    }
 }
