@@ -129,10 +129,6 @@ public class StringFilterImpl implements StringFilter{
             }
         }
 
-        System.out.println(startSet);
-
-
-
         Iterator<String> it = startSet.iterator();
         return it;
     }
@@ -153,24 +149,119 @@ public class StringFilterImpl implements StringFilter{
      */
     @Override
     public Iterator<String> getStringsByPattern(String pattern) {
-        return null;
+        Set<String> startSet = new HashSet<String>();
+        ArrayList<String> arLis = new ArrayList<>();
+
+        if ((pattern != null) && (!pattern.isEmpty())) {
+            int i = 0;
+            int a = 0;
+            while (i < pattern.length()) {
+                if (pattern.charAt(i) == '*') {
+                    arLis.add(String.copyValueOf(pattern.toCharArray(), a, i - a));
+                    arLis.add("*");
+                    a = i + 1;
+                }
+                i++;
+            }
+            if (pattern.length() - a > 0) {
+                arLis.add(String.copyValueOf(pattern.toCharArray(), a, pattern.length() - a));
+            }
+
+            for (String str : stringHashSet) {
+
+                if (str == null) {
+                    continue;
+                }
+
+                Iterator<String> it = arLis.iterator();
+                boolean lastIsStar = false;
+                boolean flag = true;
+                int number = 0;
+                String copyStr = String.copyValueOf(str.toCharArray());
+
+                while (it.hasNext()) {
+                    String itStr = it.next();
+                    number++;
+
+                    if (itStr.equals("*")) {
+                        lastIsStar = true;
+                        continue;
+                    } else {
+                        lastIsStar = false;
+                        int k = copyStr.indexOf(itStr);
+                        if (k < 0) {
+                            flag = false;
+                            break;
+                        } else {
+                            if ((number == 1) && (k != 0)) {
+                                flag = false;
+                                break;
+                            }
+                            copyStr = String.copyValueOf(copyStr.toCharArray(), k + itStr.length(), copyStr.length() - k - itStr.length());
+                        }
+                    }
+                }
+                if (flag && (lastIsStar || copyStr.isEmpty())) {
+                    startSet.add(str);
+                }
+            }
+        } else {
+            for (String str : stringHashSet) {
+                startSet.add(str);
+            }
+        }
+
+        Iterator<String> it = startSet.iterator();
+        return it;
     }
 
 
 //    public static void main(String... args) {
 //        StringFilter a = new StringFilterImpl();
-//        a.add("k32");
-//        a.add(null);
-//        a.add("kekbt");
-//        a.add("12");
-//        a.add("1");
-//        a.add("53");
-//
+//        a.add("protection");
+//        a.add("programs");
+//        a.add("problems");
+//        a.add("program");
+//        a.add("proprietary");
+//        a.add("protect");
 //        System.out.println(a.getCollection());
-//        Iterator<String> it = a.getStringsByNumberFormat("k#2");
 //
-////        while (it.hasNext()) {
-////            System.out.println(it.next());
-////        }
+//
+//        Iterator<String> it = a.getStringsByPattern("pro*");
+//
+//        while (it.hasNext()) {
+//            System.out.println(it.next());
+//        }
+//
+//        //distribute, restrictions, distributed, redistributors, restricted, distribution
+//        a.removeAll();
+//        a.add("distribute");
+//        a.add("restrictions");
+//        a.add("distributed");
+//        a.add("redistributors");
+//        a.add("restricted");
+//        a.add("distribution");
+//        System.out.println(a.getCollection());
+//        it = a.getStringsByPattern("*str*");
+//
+//        while (it.hasNext()) {
+//            System.out.println(it.next());
+//        }
+//
+//        a.removeAll();
+//        a.add("1kek");
+//        a.add("k1ek");
+//        a.add("ke1k");
+//        a.add("kek1");
+//        a.add("k1e1k");
+//        a.add("1kek1");
+//        a.add("kek");
+//        System.out.println(a.getCollection());
+//        it = a.getStringsByPattern("k*e*k");
+//
+//        while (it.hasNext()) {
+//            System.out.println(it.next());
+//        }
+//
 //    }
 }
